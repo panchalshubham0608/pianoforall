@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Keys Generator</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        #randomKeyContainer {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10rem;
+            font-weight: bold;
+            color: #fff;
+            background-color: #000;
+        }
+
+        .toolbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3rem;
+            background-color: #000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+            box-sizing: border-box;
+        }
+
+        .input-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .input-group label {
+            color: #fff;
+            margin-left: 0.5rem;
+        }
+
+        .input-group input {
+            margin-right: 0.5rem;
+        }
+
+        .input-group input[type="number"] {
+            width: 4rem;
+        }
+
+        .input-group input[type="checkbox"] {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .input-group input[type="checkbox"]:checked {
+            background-color: #fff;
+        }
+
+        .mr-10 {
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="toolbar">
+            <div class="input-group">
+                <input type="checkbox" id="includeSharps" checked>
+                <label for="includeSharps">Include Sharps</label>    
+            </div>
+            <div class="input-group">
+                <input type="checkbox" id="includeFlats" checked>
+                <label for="includeFlats">Include Flats</label>
+            </div>
+            <div class="input-group">
+                <label for="interval" class="mr-10">Interval</label>
+                <input type="number" id="interval" value="2000">
+            </div>
+
+        </div>
+        <div id="randomKeyContainer">A</div>
+    </main>
+    <script>
+        let container = document.getElementById('randomKeyContainer');
+        let keys = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+        let sharps = ['C#', 'D#', 'F#', 'G#', 'A#'];
+        let flats = ['Db', 'Eb', 'Gb', 'Ab', 'Bb'];
+        const onchange = () => {
+            let allKeys = [...keys];
+            if (document.getElementById("includeSharps").checked) {
+                allKeys = [...allKeys, ...sharps];
+            }
+            if (document.getElementById("includeFlats").checked) {
+                allKeys = [...allKeys, ...flats];
+            }
+            clearInterval(interval);
+            interval = setInterval(() => {
+                let randomKey = allKeys[Math.floor(Math.random() * allKeys.length)];
+                container.innerHTML = randomKey;
+            }, document.getElementById("interval").value);
+        };
+        document.getElementById("includeSharps").addEventListener('change', onchange);
+        document.getElementById("includeFlats").addEventListener('change', onchange);
+        document.getElementById("interval").addEventListener('change', onchange);
+        let interval = setInterval(() => {
+            let allKeys = keys.concat(sharps, flats);
+            let randomKey = allKeys[Math.floor(Math.random() * allKeys.length)];
+            container.innerHTML = randomKey;
+        }, 2000);
+    </script>
+</body>
+</html>
