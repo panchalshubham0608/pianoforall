@@ -94,6 +94,7 @@
         let keys = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
         let sharps = ['C#', 'D#', 'F#', 'G#', 'A#'];
         let flats = ['Db', 'Eb', 'Gb', 'Ab', 'Bb'];
+        let speechSynthesis = window.speechSynthesis;
         const onchange = () => {
             let allKeys = [...keys];
             if (document.getElementById("includeSharps").checked) {
@@ -106,6 +107,8 @@
             interval = setInterval(() => {
                 let randomKey = allKeys[Math.floor(Math.random() * allKeys.length)];
                 container.innerHTML = randomKey;
+                let utterance = new SpeechSynthesisUtterance(randomKey);
+                speechSynthesis.speak(utterance);
             }, document.getElementById("interval").value);
         };
         document.getElementById("includeSharps").addEventListener('change', onchange);
@@ -114,6 +117,8 @@
         let interval = setInterval(() => {
             let allKeys = keys.concat(sharps, flats);
             let randomKey = allKeys[Math.floor(Math.random() * allKeys.length)];
+            let utterance = new SpeechSynthesisUtterance(randomKey);
+            speechSynthesis.speak(utterance);
             container.innerHTML = randomKey;
         }, 2000);
     </script>
