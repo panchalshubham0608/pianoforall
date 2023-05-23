@@ -74,12 +74,16 @@
     <main>
         <div class="toolbar">
             <div class="input-group">
-                <input type="checkbox" id="includeSharps" checked>
+                <input type="checkbox" id="includeSharps">
                 <label for="includeSharps">Include Sharps</label>    
             </div>
             <div class="input-group">
-                <input type="checkbox" id="includeFlats" checked>
+                <input type="checkbox" id="includeFlats">
                 <label for="includeFlats">Include Flats</label>
+            </div>
+            <div class="input-group">
+                <input type="checkbox" id="utter">
+                <label for="utter">Utter</label>
             </div>
             <div class="input-group">
                 <label for="interval" class="mr-10">Interval</label>
@@ -90,11 +94,20 @@
         <div id="randomKeyContainer">A</div>
     </main>
     <script>
+        function utter(key) {
+            let text = key[0];
+            if (new String(key).endsWith('#')) {
+                text += ' sharp';
+            } else if (new String(key).endsWith('b')) {
+                text += ' flat';
+            }
+            let utterance = new SpeechSynthesisUtterance(text);
+            speechSynthesis.speak(utterance);
+        }
         let container = document.getElementById('randomKeyContainer');
         let keys = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
         let sharps = ['C#', 'D#', 'F#', 'G#', 'A#'];
         let flats = ['Db', 'Eb', 'Gb', 'Ab', 'Bb'];
-        let speechSynthesis = window.speechSynthesis;
         const onchange = () => {
             let allKeys = [...keys];
             if (document.getElementById("includeSharps").checked) {
@@ -107,19 +120,18 @@
             interval = setInterval(() => {
                 let randomKey = allKeys[Math.floor(Math.random() * allKeys.length)];
                 container.innerHTML = randomKey;
-                let utterance = new SpeechSynthesisUtterance(randomKey);
-                speechSynthesis.speak(utterance);
+                if (document.getElementById("utter").checked)   utter(randomKey);
             }, document.getElementById("interval").value);
         };
         document.getElementById("includeSharps").addEventListener('change', onchange);
         document.getElementById("includeFlats").addEventListener('change', onchange);
-        document.getElementById("interval").addEventListener('change', onchange);
+        document.getElementById("utter").addEventListener('change', onchange);
+        document.getElementById("interval").addEventListener('change', onchange);        
         let interval = setInterval(() => {
-            let allKeys = keys.concat(sharps, flats);
+            let allKeys = [...keys];
             let randomKey = allKeys[Math.floor(Math.random() * allKeys.length)];
-            let utterance = new SpeechSynthesisUtterance(randomKey);
-            speechSynthesis.speak(utterance);
             container.innerHTML = randomKey;
+            utter(randomKey);
         }, 2000);
     </script>
 </body>
